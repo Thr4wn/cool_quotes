@@ -7,27 +7,27 @@
 # All rights reserved - Do Not Redistribute
 #
 
-#include_recipe "nginx::default"
+include_recipe "nginx::default"
 
 
 
 ############################################
 ############################################
 
-package 'git'
+#package 'git'
 
 # needed for rails' bundle install
-package 'libsqlite3-dev'
-package 'sqlite3' 
-package 'build-essential' 
+#package 'libsqlite3-dev'
+#package 'sqlite3' 
+#package 'build-essential' 
 
-directory "/usr/local/src/cool_quotes"
+#directory "/usr/local/src/cool_quotes"
 
-git "/usr/local/src/cool_quotes" do
-    repository 'https://github.com/Thr4wn/cool_quotes.git'
-    reference "master"
-    action :sync
-end
+#git "/usr/local/src/cool_quotes" do
+    #repository 'https://github.com/Thr4wn/cool_quotes.git'
+    #reference "master"
+    #action :sync
+#end
 
 #remote_directory "Copy rails app to /srv" do 
   #path "/srv/cool_quotes_srv" 
@@ -35,23 +35,23 @@ end
 #end
 
 #TODO: rsync or something way better than this.
-execute "sudo rm -rf /srv/cool_quotes_srv"
-execute "sudo cp -R /usr/local/src/cool_quotes/rails_app /srv/cool_quotes_srv"
+#execute "sudo rm -rf /srv/cool_quotes_srv"
+#execute "sudo cp -R /usr/local/src/cool_quotes/rails_app /srv/cool_quotes_srv"
 
 # https://supermarket.chef.io/cookbooks/application_ruby
-application '/srv/cool_quotes_srv' do
-  bundle_install do
-    #user 'ubuntu'
-    deployment true
-    without %w{development test}
-  end
-  rails do
-    database 'sqlite3:///db.sqlite3'
-    #secret_token 'd78fe08df56c9'
-    migrate true
-  end
-  unicorn do
-    port 8765
-  end
-end
+#application '/srv/cool_quotes_srv' do
+  #bundle_install do
+    ##user 'ubuntu'
+    #deployment true
+    #without %w{development test}
+  #end
+  #rails do
+    #database 'sqlite3:///db.sqlite3'
+    ##secret_token 'd78fe08df56c9'
+    #migrate true
+  #end
+  #unicorn do
+    #port 8765
+  #end
+#end
 
