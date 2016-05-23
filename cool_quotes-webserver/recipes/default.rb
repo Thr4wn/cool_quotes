@@ -8,3 +8,10 @@
 #
 
 include_recipe "nginx::default"
+
+git "/srv" do
+    repository 'https://github.com/Thr4wn/cool_quotes.git'
+    reference "master"
+    action :sync
+end
+
