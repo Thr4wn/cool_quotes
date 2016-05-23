@@ -8,25 +8,40 @@
 #
 
 #include_recipe "nginx::default"
-#
+
+
+
+############################################
+############################################
 
 package 'git'
 
+# needed for rails' bundle install
+package 'libsqlite3-dev'
+package 'sqlite3' 
+package 'build-essential' 
+
 directory "/usr/local/src/cool_quotes"
 
-git "/usr/local/src" do
+git "/usr/local/src/cool_quotes" do
     repository 'https://github.com/Thr4wn/cool_quotes.git'
     reference "master"
     action :sync
 end
 
-remote_file "Copy rails app to /srv" do 
-  path "/srv/cool_quotes_srv" 
-  source "file:///usr/local/src/cool_quotes/rails_app"
-end
+#remote_directory "Copy rails app to /srv" do 
+  #path "/srv/cool_quotes_srv" 
+  #source "file:///usr/local/src/cool_quotes/rails_app"
+#end
 
+#TODO: rsync or something way better than this.
+execute "sudo rm -rf /srv/cool_quotes_srv"
+execute "sudo cp -R /usr/local/src/cool_quotes/rails_app /srv/cool_quotes_srv"
+
+# https://supermarket.chef.io/cookbooks/application_ruby
 application '/srv/cool_quotes_srv' do
   bundle_install do
+    #user 'ubuntu'
     deployment true
     without %w{development test}
   end
@@ -36,7 +51,7 @@ application '/srv/cool_quotes_srv' do
     migrate true
   end
   unicorn do
-    port 8000
+    port 8765
   end
 end
 
