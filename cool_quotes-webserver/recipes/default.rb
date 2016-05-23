@@ -7,8 +7,30 @@
 # All rights reserved - Do Not Redistribute
 #
 
+WEBROOT = '/var/www/nginx-default'
+
+include_recipe 'apt'
 include_recipe "nginx::default"
 
+directory '/var/www' do
+    mode '0755'
+end
+directory WEBROOT do
+    mode '0755'
+end
+
+package 'git'
+directory "/usr/local/src"
+directory "/usr/local/src/cool_quotes"
+git "/usr/local/src/cool_quotes" do
+    repository 'https://github.com/Thr4wn/cool_quotes.git'
+    reference "master"
+    action :sync
+end
+
+#TODO: rsync or something way better than this.
+execute "sudo rm -rf #{WEBROOT}/*"
+execute "sudo cp -R /usr/local/src/cool_quotes/static_app/* #{WEBROOT}"
 
 
 ############################################
