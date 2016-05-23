@@ -9,6 +9,8 @@
 
 include_recipe "nginx::default"
 
+package 'git'
+
 git "/srv" do
     repository 'https://github.com/Thr4wn/cool_quotes.git'
     reference "master"
